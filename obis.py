@@ -18,7 +18,7 @@ class occurrenceApi(BaseModel):
     @field_validator('startdate', 'enddate')
     def validate_date_format(cls, value):
         try:
-            datetime.strptime(value, "%Y-%M-%D")
+            datetime.strptime(value, "%Y-%m-%d")
             return value
         except ValueError:
             raise ValueError("Incorrect date format, should be YYYY-MM-DD")
@@ -120,7 +120,6 @@ if __name__=="__main__":
     obis = obis()
     userInput = input("Enter Search Query: \n")
     obis.build_prompt(user_input=userInput)
-    print(obis.getApiKey())
     obis.getApiPayload()
     obis.verify_payload()
     print(obis.getPayload())
