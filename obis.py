@@ -33,6 +33,8 @@ class obis:
         self.error = ""
 
     def getApiPayload(self):
+        if len(self.prompt) == 0:
+            return
         url = "https://api.openai.com/v1/chat/completions"
         headers = {
             "Content-Type": "application/json",
@@ -55,11 +57,15 @@ class obis:
         return 0
     
     def extract_params_dict(self):
-        print(type(self.payload))
+        if len(self.payload) == 0:
+            return
         data = json.loads(self.payload)
         self.payload = urlencode(data)
 
     def build_prompt(self, user_input):
+        if user_input == None or len(user_input) == 0:
+            return
+        
         self.prompt = f"""
             You are an assistant that generates query parameters for the OBIS API's `/occurrence` endpoint.
             Given a natural language request, extract the relevant parameters and return a valid Python dictionary named `params`. 
