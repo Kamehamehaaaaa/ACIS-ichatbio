@@ -104,7 +104,7 @@ class OBISAgent(IChatBioAgent):
                 temperature=0
             )
 # instructor issue capture
-            print(req.scientificname)
+            print(self.agent_card.entrypoints[0].id)
 
             obis_query = OBISRequest(obis_url=getValue("OBIS_URL"), payload=req)
             url = obis_query.query_obis_api()
