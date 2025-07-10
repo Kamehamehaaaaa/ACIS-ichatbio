@@ -3,7 +3,7 @@ from typing import override, Optional, AsyncGenerator, AsyncIterator
 from pydantic import BaseModel
 
 from ichatbio.agent import IChatBioAgent
-from ichatbio.types import AgentCard, Message
+from ichatbio.types import AgentCard
 from entrypoints import get_occurrence
 
 class OBISAgent(IChatBioAgent):
@@ -20,13 +20,9 @@ class OBISAgent(IChatBioAgent):
         )
 
     @override
-    async def run(self, request: str, entrypoint: str, params: Optional[BaseModel]) -> AsyncGenerator[None, Message]:
-        coro: AsyncIterator[Message]
+    async def run(self, context, request: str, entrypoint: str, params: Optional[BaseModel]):
         match entrypoint:
             case get_occurrence.entrypoint.id:
-                coro = get_occurrence.run(request)
+                await get_occurrence.run(request, context)
             case _:
                 raise ValueError()
-
-        async for message in coro:
-            yield message
