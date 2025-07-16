@@ -4,7 +4,9 @@ from pydantic import BaseModel
 
 from ichatbio.agent import IChatBioAgent
 from ichatbio.types import AgentCard
-from entrypoints import get_occurrence
+from entrypoints import get_occurrence, checklist
+
+from ichatbio.agent_response import ResponseContext, IChatBioAgentProcess
 
 class OBISAgent(IChatBioAgent):
 
@@ -20,9 +22,12 @@ class OBISAgent(IChatBioAgent):
         )
 
     @override
-    async def run(self, context, request: str, entrypoint: str, params: Optional[BaseModel]):
+    async def run(self, context: ResponseContext, request: str, entrypoint: str, params: Optional[BaseModel]):
         match entrypoint:
             case get_occurrence.entrypoint.id:
                 await get_occurrence.run(request, context)
+            case checklist.entrypoint.id:
+                await checklist.run(request, context)
             case _:
                 raise ValueError()
+        await context.reply("OBIS query completed")
