@@ -37,7 +37,8 @@ async def main():
     # messages1 = [m async for m in response]
     print(messages)
 
-# run_agent_server(agent, "127.0.0.1", 9999)
-userInput = input("Enter Search Query: \n")
-asyncio.run(main())
+agent = OBISAgent()
+run_agent_server(agent, "0.0.0.0", 8989)
+# userInput = input("Enter Search Query: \n")
+# asyncio.run(main())
 
