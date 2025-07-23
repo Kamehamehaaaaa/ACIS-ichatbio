@@ -7,7 +7,7 @@ from ichatbio.types import AgentEntrypoint
 async def _generate_search_parameters(request: str, entrypoint: AgentEntrypoint, returnModel):
     system_prompt = prompt.build_system_prompt(entrypoint.id)
         
-    client = AsyncOpenAI(api_key=utils.getValue("OPEN_API_KEY"))
+    client = AsyncOpenAI(api_key=utils.getValue("OPEN_API_KEY"), base_url=utils.getValue("OPENAI_BASE_URL"))
     # yield TextMessage(text="OpenApi client initialized.")
 
     # print(client)
