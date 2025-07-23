@@ -6,7 +6,7 @@ from openai import OpenAI, AsyncOpenAI
 import instructor
 from instructor.exceptions import InstructorRetryException
 
-from schema import occurrenceApi
+from schema import checklistApi
 from tenacity import AsyncRetrying
 
 import requests
@@ -20,34 +20,10 @@ from utils import search_helper as search
 from utils import utils
 
 entrypoint= AgentEntrypoint(
-    id="get_occurrence",
-    description="Returns occurrence of species from OBIS",
+    id="checklist",
+    description="Generates a checklist for the species from OBIS",
     parameters=None
 )
-
-# async def _generate_search_parameters(request: str):
-#     system_prompt = utils.build_system_prompt(entrypoint.id)
-        
-#     client = AsyncOpenAI(api_key=utils.getValue("OPEN_API_KEY"))
-#     # yield TextMessage(text="OpenApi client initialized.")
-
-#     print(client)
-    
-#     instructor_client = instructor.patch(client)
-
-#     req: occurrenceApi = await instructor_client.chat.completions.create(
-#         model="gpt-3.5-turbo",
-#         response_model=occurrenceApi,
-#         messages=[
-#             {"role": "system",
-#                 "content": system_prompt},
-#             {"role": "user", "content": request}],
-#         temperature=0,
-#     )
-
-#     generation = req.model_dump(exclude_none=True, by_alias=True)
-#     return generation
-
 
 async def run(request: str, context: ResponseContext):
 
@@ -55,10 +31,10 @@ async def run(request: str, context: ResponseContext):
     async with context.begin_process(summary="Searching Ocean Biodiversity Information System") as process:
         process: IChatBioAgentProcess
 
-        await process.log("Generating search parameters for species occurrences")
+        await process.log("Generating search parameters for species checklist")
         
         try:
-            params = await search._generate_search_parameters(request, entrypoint, occurrenceApi)
+            params = await search._generate_search_parameters(request, entrypoint, checklistApi)
         except Exception as e:
             await process.log("Error generating params.")
 
@@ -66,10 +42,13 @@ async def run(request: str, context: ResponseContext):
         
         await process.log("Generated search parameters", data=params)
 
+    async with context.begin_process(summary="Query OBIS") as process:
+        process: IChatBioAgentProcess
+
         await process.log("Querying OBIS")
         try:
             
-            url = utils.generate_obis_url("occurrence", params)
+            url = utils.generate_obis_url("checklist", params)
             await process.log(f"Sending a GET request to the OBIS occurrence API at {url}")
 
             response = requests.get(url)
@@ -82,6 +61,8 @@ async def run(request: str, context: ResponseContext):
                 return
             
             response_json = response.json()
+
+            process.log(response_json)
             
             matching_count = response_json.get("total", 0)
             record_count = len(response_json.get("results", []))
