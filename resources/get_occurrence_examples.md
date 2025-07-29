@@ -43,3 +43,97 @@ rq: {
     "absence": "true"
 }
 ```
+
+## Example 5 - search for first 100 records
+
+```
+"Request": "Get the first 100 records of Egregia menziesii",
+"rq": {
+    "scientificname": "Egregia menziesii",
+    "limit": 100
+}
+```
+
+## Example 6 - search for next 100 records
+
+```
+"Request": "Get the next 100 records after the first 100 for Egregia menziesii",
+"rq": {
+    "scientificname": "Egregia menziesii",
+    "limit": 100,
+    "offset": 100
+}
+```
+
+## Example 7 - search between dates
+
+```
+"Request": "Search for Egregia menziesii observed between 2010 and 2020",
+"rq": {
+    "scientificname": "Egregia menziesii",
+    "startdate": "2010-01-01",
+    "enddate": "2020-12-31"
+}
+```
+
+## Example 8 - search in a region
+
+```
+"Request": "Find Egregia menziesii in the Pacific Ocean",
+"rq": {
+    "scientificname": "Egregia menziesii",
+    "marine_region": "Pacific Ocean"
+}
+```
+
+## Example 9 - search within certain depth of ocean
+
+```
+"Request": "Find records of Egregia menziesii collected shallower than 5 meters",
+"rq": {
+    "scientificname": "Egregia menziesii",
+    "depth_to": 5
+}
+```
+
+## Example 10 - search after certain depth of ocean
+
+```
+"Request": "Find records of Egregia menziesii deeper than 10 meters",
+"rq": {
+    "scientificname": "Egregia menziesii",
+    "depth_from": 10
+}
+```
+
+## Example 11 - search with institution code
+
+```
+"Request": "Get Egregia menziesii observations recorded by MBARI",
+"rq": {
+    "scientificname": "Egregia menziesii",
+    "institutioncode": "MBARI"
+}
+```
+
+## Example 12 - search with latitudes and longitudes
+
+```
+"Request": "Find Egregia menziesii between latitudes 30 and 40 and longitudes -130 and -120",
+"rq": {
+    "scientificname": "Egregia menziesii",
+    "decimalLatitude_min": 30,
+    "decimalLatitude_max": 40,
+    "decimalLongitude_min": -130,
+    "decimalLongitude_max": -120
+}
+```
+
+## Example 13 - search from a dataset
+
+```
+"Request": "Find all records from dataset 'Intertidal Monitoring Project'",
+"rq": {
+    "datasetid": "Intertidal Monitoring Project"
+}
+```

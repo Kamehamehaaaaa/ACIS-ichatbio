@@ -42,9 +42,6 @@ async def run(request: str, context: ResponseContext):
         
         await process.log("Generated search parameters", data=params)
 
-    async with context.begin_process(summary="Query OBIS") as process:
-        process: IChatBioAgentProcess
-
         await process.log("Querying OBIS")
         try:
             

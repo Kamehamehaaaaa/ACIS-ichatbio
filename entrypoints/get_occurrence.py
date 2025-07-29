@@ -86,8 +86,8 @@ async def run(request: str, context: ResponseContext):
             matching_count = response_json.get("total", 0)
             record_count = len(response_json.get("results", []))
 
-            print(code, matching_count, record_count)
-            print(response_json)
+            # print(code, matching_count, record_count)
+            # print(response_json)
 
             await process.log(
                 text=f"The API query using URL {url} returned {record_count} out of {matching_count} matching records in OBIS"
@@ -103,6 +103,27 @@ async def run(request: str, context: ResponseContext):
                     "retrieved_record_count": record_count,
                     "total_matching_count": matching_count
                 }
+            )
+
+            await process.log("Querying for point data ")
+            url = utils.generate_obis_url("occurrence/points", params)
+            await process.log(f"Sending a GET request to the OBIS occurrence API at {url}")
+
+            response = requests.get(url)
+            code = f"{response.status_code} {http.client.responses.get(response.status_code, '')}"
+
+            if response.ok:
+                await process.log(f"Response code: {code}")
+            else:
+                await process.log(f"Response code: {code} - something went wrong!")
+                return
+
+            response_json = response.json()
+
+            record_count = len(response_json.get("coordinates", []))
+
+            await process.log(
+                text=f"The API query using URL {url} returned {record_count} points matching records in OBIS"
             )
 
             # yield ArtifactMessage(

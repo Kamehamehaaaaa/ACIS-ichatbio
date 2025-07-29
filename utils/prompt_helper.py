@@ -22,8 +22,8 @@ def build_system_prompt(api):
         {examples_doc}
     """
 
-    query_format_doc = importlib.resources.files().joinpath("resources", api+".md").read_text()
-    examples_doc = importlib.resources.files().joinpath("resources", api+"_examples.md").read_text()
+    query_format_doc = importlib.resources.files().joinpath("../resources", api+".md").read_text()
+    examples_doc = importlib.resources.files().joinpath("../resources", api+"_examples.md").read_text()
 
     prompt = SYSTEM_PROMPT_TEMPLATE.format(
         api=api,

@@ -17,7 +17,8 @@ class OBISAgent(IChatBioAgent):
             description="Retrieves data from OBIS (https://api.obis.org).",
             icon=None,
             entrypoints=[
-                get_occurrence.entrypoint
+                get_occurrence.entrypoint,
+                checklist.entrypoint
             ]
         )
 
