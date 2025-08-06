@@ -33,3 +33,9 @@ def generate_obis_extension_url(api, payload, extensionParam, paramsRequired):
     else:
         url = obis_url+api+extensionValue
     return url
+
+def generate_mapper_obis_url(api, payload):
+    params = urlencode(payload)
+    obis_url = "https://mapper.obis.org/"
+    url = obis_url+api+'?'+params
+    return url

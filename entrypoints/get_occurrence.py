@@ -126,6 +126,46 @@ async def run(request: str, context: ResponseContext):
                 text=f"The API query using URL {url} returned {record_count} points matching records in OBIS"
             )
 
+            await process.create_artifact(
+                mimetype="application/json",
+                description="OBIS data for the prompt: " + request,
+                uris=[url],
+                metadata={
+                    "data_source": "OBIS",
+                    "portal_url": "portal_url",
+                    "retrieved_record_count": record_count,
+                }
+            )
+
+            await process.log("Querying for mapper data ")
+            url = utils.generate_mapper_obis_url("occurrence/", params)
+            await process.log(f"Sending a GET request to the Mapper OBIS occurrence API at {url}")
+
+            response = requests.get(url)
+            code = f"{response.status_code} {http.client.responses.get(response.status_code, '')}"
+
+            if response.ok:
+                await process.log(f"Response code: {code}")
+            else:
+                await process.log(f"Response code: {code} - something went wrong!")
+                return
+
+            response_json = response.json()
+
+            await process.log(
+                text=f"The API query using URL {url} "
+            )
+
+            await process.create_artifact(
+                mimetype="application/json",
+                description="OBIS data for the prompt: " + request,
+                uris=[url],
+                metadata={
+                    "data_source": "OBIS",
+                    "portal_url": "portal_url",
+                }
+            )
+
             # yield ArtifactMessage(
             #     mimetype="application/json",
             #     description="OBIS data for the prompt: " + request,
