@@ -89,6 +89,8 @@ async def run(request: str, context: ResponseContext):
             # print(code, matching_count, record_count)
             # print(response_json)
 
+            taxonid = response_json["results"][0]["infraorderid"]
+
             await process.log(
                 text=f"The API query using URL {url} returned {record_count} out of {matching_count} matching records in OBIS"
             )
@@ -138,7 +140,8 @@ async def run(request: str, context: ResponseContext):
             )
 
             await process.log("Querying for mapper data ")
-            url = utils.generate_mapper_obis_url("occurrence/", params)
+
+            url = utils.generate_mapper_obis_url("occurrence/", {"taxonid": taxonid})
             await process.log(f"Sending a GET request to the Mapper OBIS occurrence API at {url}")
 
             response = requests.get(url)
