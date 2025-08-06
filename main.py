@@ -33,6 +33,7 @@ async def main():
     messages = list()
     channel = InMemoryResponseChannel(messages)
     context = ResponseContext(channel, "617727d1-4ce8-4902-884c-db786854b51c")    
+    userInput = input()
     await agent.run(context, userInput, "get_occurrence", None)
     # messages1 = [m async for m in response]
     print(messages)

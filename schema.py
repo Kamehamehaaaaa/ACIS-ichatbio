@@ -3,25 +3,51 @@ from typing import Optional
 from datetime import datetime
 
 class occurrenceApi(BaseModel):
+
     scientificname: Optional[str] = Field(None, 
-                                          description="full scientific name", 
+                                          description="Scientific name. Leave empty to include all taxa.", 
                                           examples=["Delphinus delphis", "Alosa pseudoharengus"])
     taxonid: Optional[str] = Field(None, description="Taxon AphiaID.")
-    datasetid: Optional[str] = Field(None, description="dataset UUID")
-    startdate: Optional[str] = Field(None, 
-                                     description="Start date of query. Fetch records after this date. Should be of format YYYY-MM-DD")
-    enddate: Optional[str] = Field(None, 
-                                   description="End date of query. Fetch records before this date. Should be of format YYYY-MM-DD. Should be greater than startdate")
-    areaid: Optional[str] = Field(None, description="")
-    instituteid: Optional[str] = Field(None, description="")
-    nodeid: Optional[str] = Field(None, description="")
-    startdepth: Optional[int] = Field(None, 
-                                      description="start depth of creature instance recorded in meters")
-    enddepth: Optional[int] = Field(None, description="")
-    geometry: Optional[str] = Field(None, description="")
-    absence: Optional[str] = Field(None, 
-                                   description="Include absence records (include) or get absence records exclusively (true).")
-    id: Optional[str] = Field(None, description="ID of the record that needs to be fetched")
+    datasetid: Optional[str] = Field(None, description="Dataset UUID.")
+    areaid: Optional[str] = Field(None, description="Area ID.")
+    instituteid: Optional[str] = Field(None, description="Institute ID.")
+    nodeid: Optional[str] = Field(None, description="Node UUID.")
+    
+    startdate: Optional[str] = Field(None, description="Start date formatted as YYYY-MM-DD. Fetch records after this date.")
+    enddate: Optional[str] = Field(None, description="End date formatted as YYYY-MM-DD.")
+    
+    startdepth: Optional[int] = Field(None, description="Start depth, in meters.")
+    enddepth: Optional[int] = Field(None, description="End depth, in meters.")
+    
+    geometry: Optional[str] = Field(None, description="Geometry, formatted as WKT or GeoHash.")
+    
+    redlist: Optional[bool] = Field(None, description="Red List species only, true/false.")
+    hab: Optional[bool] = Field(None, description="HAB species only, true/false.")
+    wrims: Optional[bool] = Field(None, description="WRiMS species only, true/false.")
+    mof: Optional[bool] = Field(None, description="Include MeasurementOrFact records, true/false.")
+    dna: Optional[bool] = Field(None, description="Include DNADerivedData records, true/false.")
+    
+    extensions: Optional[str] = Field(None, description="Extensions to include (e.g. MeasurementOrFact, DNADerivedData).")
+    hasextensions: Optional[str] = Field(None, description="Extensions that need to be present (e.g. MeasurementOrFact, DNADerivedData).")
+    
+    qcfields: Optional[bool] = Field(None, description="Include lists of missing and invalid fields, true/false.")
+    dropped: Optional[str] = Field(None, description="Include dropped records (include) or get dropped records exclusively (true).")
+    absence: Optional[str] = Field(None, description="Include absence records (include) or get absence records exclusively (true).")
+    event: Optional[str] = Field(None, description="Include pure event records (include) or get pure event records exclusively (true).")
+    
+    flags: Optional[str] = Field(None, description="Comma separated list of quality flags which need to be set.")
+    exclude: Optional[str] = Field(None, description="Comma separated list of quality flags to be excluded.")
+    
+    fields: Optional[str] = Field(None, description="Fields to be included in the result set.")
+    after: Optional[str] = Field(None, description="Occurrence UUID up to which to skip.")
+    size: Optional[int] = Field(None, description="Response size.")
+    
+    measurementtype: Optional[str] = Field(None, description="Measurement type to be present for occurrence.")
+    measurementtypeid: Optional[str] = Field(None, description="Measurement type ID to be present for occurrence.")
+    measurementvalue: Optional[str] = Field(None, description="Measurement value to be present for occurrence.")
+    measurementvalueid: Optional[str] = Field(None, description="Measurement value ID to be present for occurrence.")
+    measurementunit: Optional[str] = Field(None, description="Measurement unit to be present for occurrence.")
+    measurementunitid: Optional[str] = Field(None, description="Measurement unit ID to be present for occurrence.")
 
     @field_validator('startdate', 'enddate')
     def validate_date_format(cls, value):
