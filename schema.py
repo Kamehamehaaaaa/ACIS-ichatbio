@@ -1,5 +1,5 @@
-from pydantic import BaseModel, field_validator, Field
-from typing import Optional
+from pydantic import BaseModel, field_validator, Field, constr, conint
+from typing import Optional, Annotated, Literal, Required
 from datetime import datetime
 
 class occurrenceApi(BaseModel):
@@ -61,6 +61,10 @@ class occurrenceApi(BaseModel):
         raise ValueError("Incorrect date format. Allowed formats: YYYY-MM-DD, YYYY/MM/DD, DD-MM-YYYY, DD/MM/YYYY")
 
 
+class occurrenceLookupApi(BaseModel):
+    id: Required[str] = Field(None, description="occurrence record id",
+                              examples=["00000002-3cef-4bc1-8540-2c20b4798855"])
+
 class checklistApi(BaseModel):
     scientificname: Optional[str] = Field(None, 
                                           description="full scientific name", 
@@ -80,6 +84,43 @@ class checklistApi(BaseModel):
     geometry: Optional[str] = Field(None, description="")
     absence: Optional[str] = Field(None, 
                                    description="Include absence records (include) or get absence records exclusively (true).")
+
+    @field_validator('startdate', 'enddate')
+    def validate_date_format(cls, value):
+        allowed_formats = ["%Y-%m-%d", "%Y/%m/%d", "%d-%m-%Y", "%d/%m/%Y"]
+        for format in allowed_formats:
+            try:
+                dt = datetime.strptime(value, format)
+                return dt.strftime("%Y-%m-%d")
+            except ValueError:
+                continue
+        raise ValueError("Incorrect date format. Allowed formats: YYYY-MM-DD, YYYY/MM/DD, DD-MM-YYYY, DD/MM/YYYY")
+    
+
+class statisticsApi(BaseModel):
+    scientificname: Optional[Annotated[str, Field(description="Scientific name. Leave empty to include all taxa.")]] = None
+    taxonid: Optional[Annotated[str, Field(description="Taxon AphiaID.")]] = None
+    areaid: Optional[Annotated[str, Field(description="Area ID.")]] = None
+    datasetid: Optional[Annotated[str, Field(description="Dataset UUID.")]] = None
+    nodeid: Optional[Annotated[str, Field(description="Node UUID.")]] = None
+
+    startdate: Optional[Annotated[str, Field(description="Start date formatted as YYYY-MM-DD.")]] = None
+    enddate: Optional[Annotated[str, Field(description="End date formatted as YYYY-MM-DD.")]] = None
+
+    startdepth: Optional[Annotated[int, Field(ge=0, description="Start depth, in meters (must be >= 0).")]] = None
+    enddepth: Optional[Annotated[int, Field(ge=0, description="End depth, in meters (must be >= 0).")]] = None
+
+    geometry: Optional[Annotated[str, Field(description="Geometry, formatted as WKT or GeoHash.")]] = None
+
+    redlist: Optional[Annotated[bool, Field(description="Red List species only.")]] = None
+    hab: Optional[Annotated[bool, Field(description="HAB species only.")]] = None
+    wrims: Optional[Annotated[bool, Field(description="WRiMS species only.")]] = None
+
+    dropped: Optional[Annotated[Literal["include", "true"], Field(description="Include dropped records or only dropped.")]] = None
+    absence: Optional[Annotated[Literal["include", "true"], Field(description="Include absence records or only absence.")]] = None
+
+    flags: Optional[Annotated[str, Field(description="Comma-separated list of quality flags to include.")]] = None
+    exclude: Optional[Annotated[str, Field(description="Comma-separated list of quality flags to exclude.")]] = None
 
     @field_validator('startdate', 'enddate')
     def validate_date_format(cls, value):

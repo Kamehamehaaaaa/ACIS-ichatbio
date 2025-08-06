@@ -19,3 +19,17 @@ def generate_obis_url(api, payload):
     obis_url = "https://api.obis.org/"
     url = obis_url+api+'?'+params
     return url
+
+def generate_obis_extension_url(api, payload, extensionParam, paramsRequired):
+    try:
+        extensionValue = payload.pop(extensionParam)
+    except Exception as e:
+        return ""
+
+    params = urlencode(payload)
+    obis_url = "https://api.obis.org/"
+    if paramsRequired:
+        url = obis_url+api+extensionValue+'?'+params
+    else:
+        url = obis_url+api+extensionValue
+    return url
