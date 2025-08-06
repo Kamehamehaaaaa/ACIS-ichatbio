@@ -50,7 +50,7 @@ rq: {
 "Request": "Get the first 100 records of Egregia menziesii",
 "rq": {
     "scientificname": "Egregia menziesii",
-    "limit": 100
+    "size": 100
 }
 ```
 
@@ -60,8 +60,8 @@ rq: {
 "Request": "Get the next 100 records after the first 100 for Egregia menziesii",
 "rq": {
     "scientificname": "Egregia menziesii",
-    "limit": 100,
-    "offset": 100
+    "size": 100,
+    "after": 100
 }
 ```
 
