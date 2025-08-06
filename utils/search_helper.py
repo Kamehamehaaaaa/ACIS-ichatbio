@@ -1,6 +1,6 @@
 from openai import AsyncOpenAI
-import prompt_helper as prompt
-import utils as utils
+from utils import prompt_helper as prompt
+from utils import utils as utils
 import instructor
 from ichatbio.types import AgentEntrypoint
 

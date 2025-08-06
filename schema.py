@@ -62,7 +62,7 @@ class occurrenceApi(BaseModel):
 
 
 class occurrenceLookupApi(BaseModel):
-    id: Required[str] = Field(None, description="occurrence record id",
+    id: Optional[str] = Field(None, description="occurrence record id",
                               examples=["00000002-3cef-4bc1-8540-2c20b4798855"])
 
 class checklistApi(BaseModel):
