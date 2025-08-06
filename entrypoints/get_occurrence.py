@@ -141,7 +141,7 @@ async def run(request: str, context: ResponseContext):
 
             await process.log("Querying for mapper data ")
 
-            url = utils.generate_mapper_obis_url("occurrence/", {"taxonid": taxonid})
+            url = utils.generate_mapper_obis_url("", {"taxonid": taxonid})
             await process.log(f"Sending a GET request to the Mapper OBIS occurrence API at {url}")
 
             response = requests.get(url)
