@@ -46,7 +46,7 @@ async def run(request: str, context: ResponseContext):
         await process.log("Querying OBIS")
         try:
             
-            url = utils.generate_obis_url_extension("occurrence/", params, "id", False)
+            url = utils.generate_obis_extension_url("occurrence/", params, "id", False)
             
             if len(url) == 0:
                 await process.log("Error in generating URL for data retrieval from OBIS")
