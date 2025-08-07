@@ -29,9 +29,9 @@ def generate_obis_extension_url(api, payload, extensionParam, paramsRequired):
     params = urlencode(payload)
     obis_url = "https://api.obis.org/"
     if paramsRequired:
-        url = obis_url+api+extensionValue+'?'+params
+        url = obis_url+api+"/"+extensionValue+'?'+params
     else:
-        url = obis_url+api+extensionValue
+        url = obis_url+api+"/"+extensionValue
     return url
 
 def generate_mapper_obis_url(api, payload):
