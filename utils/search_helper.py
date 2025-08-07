@@ -22,4 +22,4 @@ async def _generate_search_parameters(request: str, entrypoint: AgentEntrypoint,
     )
 
     generation = req.model_dump(exclude_none=True, by_alias=True)
-    return generation
+    return generation    

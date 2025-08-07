@@ -19,6 +19,8 @@ from ichatbio.types import AgentCard, AgentEntrypoint
 from utils import search_helper as search
 from utils import utils
 
+from entrypoints import statistics
+
 entrypoint= AgentEntrypoint(
     id="statistics_year",
     description="Gets number of presence records of species per year from OBIS",
@@ -32,10 +34,11 @@ async def run(request: str, context: ResponseContext):
     async with context.begin_process(summary="Searching Ocean Biodiversity Information System") as process:
         process: IChatBioAgentProcess
 
-        await process.log("Generating search parameters for statistics of species")
+        await process.log("Generating search parameters for statistics of species by year")
         
         try:
-            params = await search._generate_search_parameters(request, entrypoint, statisticsApi)
+            # pass parent entrypoint for extensions
+            params = await search._generate_search_parameters(request, statistics.entrypoint, statisticsApi)
         except Exception as e:
             await process.log("Error generating params.")
 
