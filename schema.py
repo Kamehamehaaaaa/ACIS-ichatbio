@@ -137,7 +137,7 @@ class statisticsApi(BaseModel):
 class facetsAPIParams(BaseModel):
     facets: Required[list] = Field(None, description="Comma separated list of facets", examples= ["originalScientificName,flags", "node_id"])
     composite: Optional[bool] = Field(None, description="Composite aggregation")
-    scientificname: Optional[str] = Field(None, description="Scientific name. Leave empty to include all taxa")
+    scientificname: Optional[str] = Field(None, description="Scientific name. Leave empty to include all taxa", examples=["brachyura", "Cancer borealis"])
     taxonid: Optional[str] = Field(None, description="Taxon AphiaID")
     areaid: Optional[str] = Field(None, description="Area ID")
     datasetid: Optional[str] = Field(None, description="Dataset UUID")
@@ -146,7 +146,7 @@ class facetsAPIParams(BaseModel):
     enddate: Optional[str] = Field(None, description="End date formatted as YYYY-MM-DD")
     startdepth: Optional[int] = Field(None, ge=0, description="Start depth in meters")
     enddepth: Optional[int] = Field(None, ge=0, description="End depth in meters")
-    geometry: Optional[str] = Field(None, description="Geometry, formatted as WKT or GeoHash")
+    geometry: Optional[str] = Field(None, description="Geometry, formatted as WKT or GeoHash", examples=["POLYGON((140 -40, 150 -40, 150 -30, 140 -30, 140 -40))"])
     redlist: Optional[bool] = Field(None, description="Red List species only")
     hab: Optional[bool] = Field(None, description="HAB species only")
     wrims: Optional[bool] = Field(None, description="WRiMS species only")
