@@ -20,7 +20,7 @@ from utils import utils
 
 entrypoint= AgentEntrypoint(
     id="facet",
-    description="Returns record counts of one or more facets of species from OBIS",
+    description="Get record counts for one or more facets from OBIS.",
     parameters=None
 )
 

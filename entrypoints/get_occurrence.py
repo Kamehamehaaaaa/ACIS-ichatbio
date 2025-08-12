@@ -25,30 +25,6 @@ entrypoint= AgentEntrypoint(
     parameters=None
 )
 
-# async def _generate_search_parameters(request: str):
-#     system_prompt = utils.build_system_prompt(entrypoint.id)
-        
-#     client = AsyncOpenAI(api_key=utils.getValue("OPEN_API_KEY"))
-#     # yield TextMessage(text="OpenApi client initialized.")
-
-#     print(client)
-    
-#     instructor_client = instructor.patch(client)
-
-#     req: occurrenceApi = await instructor_client.chat.completions.create(
-#         model="gpt-3.5-turbo",
-#         response_model=occurrenceApi,
-#         messages=[
-#             {"role": "system",
-#                 "content": system_prompt},
-#             {"role": "user", "content": request}],
-#         temperature=0,
-#     )
-
-#     generation = req.model_dump(exclude_none=True, by_alias=True)
-#     return generation
-
-
 async def run(request: str, context: ResponseContext):
 
     # Start a process to log the agent's actions
@@ -86,8 +62,6 @@ async def run(request: str, context: ResponseContext):
             matching_count = response_json.get("total", 0)
             record_count = len(response_json.get("results", []))
 
-            # print(code, matching_count, record_count)
-            # print(response_json)
 
             taxonid = response_json["results"][0]["infraorderid"]
 
@@ -169,15 +143,7 @@ async def run(request: str, context: ResponseContext):
                 }
             )
 
-            # yield ArtifactMessage(
-            #     mimetype="application/json",
-            #     description="OBIS data for the prompt: " + request,
-            #     uris=[url],
-            #     content=response.content,
-            #     metadata={
-            #         "api_query_url": url
-            #     }
-            # )
+            await context.reply(f"I have successfully searched for occurrences and found {record_count} matching records. I've created an artifact with the results.")
 
         except InstructorRetryException as e:
             print(e)

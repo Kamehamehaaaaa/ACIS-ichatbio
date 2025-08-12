@@ -15,6 +15,12 @@ def getValue(key):
     return value
 
 def generate_obis_url(api, payload):
+    if api == "facet":
+        tmp = payload["facets"]
+        facets = tmp[0]
+        for i in tmp:
+            facets = facets + "," + i
+        payload["facets"] = facet
     params = urlencode(payload)
     obis_url = "https://api.obis.org/"
     url = obis_url+api+'?'+params

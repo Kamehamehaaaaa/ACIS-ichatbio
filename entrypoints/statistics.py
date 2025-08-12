@@ -66,7 +66,7 @@ async def run(request: str, context: ResponseContext):
 
             record_count = response_json.get("records", 0)
 
-            await process.log(response_json)
+            # await process.log(response_json)
 
             await process.create_artifact(
                 mimetype="application/json",
