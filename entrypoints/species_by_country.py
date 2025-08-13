@@ -55,6 +55,8 @@ async def run(request: str, context: ResponseContext):
 
         institutes = await get_institutes_by_country(request)
 
+        await process.log(institutes[0])
+
         await process.log("Generating search parameters for occurrences of species")
         
         try:
@@ -62,6 +64,8 @@ async def run(request: str, context: ResponseContext):
         except Exception as e:
             await process.log("Error generating params.")
             return
+        
+        del params["areaid"]
         
         await process.log("Generated search parameters", data=params)
 
@@ -80,6 +84,8 @@ async def run(request: str, context: ResponseContext):
 
                 records += response_json.get("results")
 
+                await process.log(url)
+
             # await process.log(f"Sending a GET request to the OBIS statistics API at {url}")
 
             # await process.log(
@@ -94,7 +100,7 @@ async def run(request: str, context: ResponseContext):
                 mimetype="text/plain",
                 description="OBIS data for the prompt: " + request,
                 uris=[],
-                content=records,
+                content=bytes(records),
                 metadata={
                     "data_source": "OBIS",
                     "portal_url": "portal_url",
