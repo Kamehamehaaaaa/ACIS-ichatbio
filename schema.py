@@ -241,3 +241,9 @@ class instituteSearch(BaseModel):
             except ValueError:
                 continue
         raise ValueError("Incorrect date format. Allowed: YYYY-MM-DD, YYYY/MM/DD, DD-MM-YYYY, DD/MM/YYYY")
+
+
+class countryFromRequest(BaseModel):
+    country: str = Field(None,
+                         description="Country specified in the request",
+                         examples=["USA", "India", "Canada"])
