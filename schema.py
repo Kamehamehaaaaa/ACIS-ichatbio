@@ -247,3 +247,9 @@ class countryFromRequest(BaseModel):
     country: str = Field(None,
                          description="Country specified in the request",
                          examples=["USA", "India", "Canada"])
+    
+
+class placeFromRequest(BaseModel):
+    place: str = Field(None,
+                         description="place or region specified in the request",
+                         examples=["Pacific Region", "USA", "Atlantic"])

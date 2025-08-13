@@ -31,6 +31,10 @@ async def run(request: str, context: ResponseContext):
     async with context.begin_process(summary="Searching Ocean Biodiversity Information System") as process:
         process: IChatBioAgentProcess
 
+        place_res = await search.get_place_from_request(request)
+
+        wkt = search.place_to_geohash_wkt(place_res["place"], 6)
+
         await process.log("Generating search parameters for species occurrences")
         
         try:
@@ -39,6 +43,10 @@ async def run(request: str, context: ResponseContext):
             await process.log("Error generating params.")
 
             return
+        
+        if "areaid" in params:
+            del params["areadid"]
+            params["geomotry"] = wkt
         
         await process.log("Generated search parameters", data=params)
 

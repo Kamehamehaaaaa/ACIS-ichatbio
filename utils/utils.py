@@ -9,20 +9,22 @@ def getValue(key):
     if value == None:
         with open('env.yaml', 'r') as file:
             data = yaml.safe_load(file)
-        
+
         value = data[key]
 
     return value
 
 def generate_obis_url(api, payload):
+    obis_url = "https://api.obis.org/"
     if api == "facet":
         tmp = payload["facets"]
         facets = tmp[0]
         for i in tmp[1:]:
             facets = facets + "," + i
         payload["facets"] = facets
+    if len(payload) == 0:
+        return obis_url+api
     params = urlencode(payload)
-    obis_url = "https://api.obis.org/"
     url = obis_url+api+'?'+params
     return url
 
