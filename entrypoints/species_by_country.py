@@ -37,7 +37,7 @@ async def get_institutes_by_country(request, process):
     if response.ok == False:
         await process.log("responses is not okay")
         return []
-    
+
     results = response.json()["results"]
     institutes = []
 
@@ -50,7 +50,6 @@ async def get_institutes_by_country(request, process):
 
 async def run(request: str, context: ResponseContext):
 
-
     # Start a process to log the agent's actions
     async with context.begin_process(summary="Searching Ocean Biodiversity Information System") as process:
         process: IChatBioAgentProcess
@@ -58,15 +57,15 @@ async def run(request: str, context: ResponseContext):
         institutes = await get_institutes_by_country(request, process)
 
         await process.log("Generating search parameters for occurrences of species")
-        
+
         try:
             params = await search._generate_search_parameters(request, get_occurrence.entrypoint, occurrenceApi)
         except Exception as e:
             await process.log("Error generating params.")
             return
-        
+
         del params["areaid"]
-        
+
         await process.log("Generated search parameters", data=params)
 
         await process.log("Querying OBIS")

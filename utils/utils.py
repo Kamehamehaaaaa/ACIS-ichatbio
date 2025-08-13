@@ -9,7 +9,7 @@ def getValue(key):
     if value == None:
         with open('env.yaml', 'r') as file:
             data = yaml.safe_load(file)
-        
+
         value = data[key]
 
     return value
