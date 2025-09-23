@@ -32,8 +32,10 @@ async def run(request: str, context: ResponseContext):
         process: IChatBioAgentProcess
 
         place_res = await search.get_place_from_request(request)
+        wkt = ""
 
-        wkt = search.place_to_geohash_wkt(place_res["place"], 6)
+        if "place" in place_res:
+            wkt = await search.place_to_geohash_wkt(place_res["place"], 2)
 
         await process.log("Generating search parameters for species occurrences")
         
@@ -43,10 +45,15 @@ async def run(request: str, context: ResponseContext):
             await process.log("Error generating params.")
 
             return
+
+        await process.log("Initial params generated", data=params)
         
         if "areaid" in params:
-            del params["areadid"]
-            params["geomotry"] = wkt
+            del params["areaid"]
+            await process.log(wkt)
+            wkt = str(wkt)
+            wkt_updated = wkt.replace("POLYGON ", "POLYGON")
+            params["geometry"] = wkt_updated
         
         await process.log("Generated search parameters", data=params)
 
@@ -71,7 +78,7 @@ async def run(request: str, context: ResponseContext):
             record_count = len(response_json.get("results", []))
 
 
-            taxonid = response_json["results"][0]["infraorderid"]
+            #taxonid = response_json["results"][0]["infraorderid"]
 
             await process.log(
                 text=f"The API query using URL {url} returned {record_count} out of {matching_count} matching records in OBIS"
@@ -120,37 +127,6 @@ async def run(request: str, context: ResponseContext):
                     "retrieved_record_count": record_count,
                 }
             )
-
-            await process.log("Querying for mapper data ")
-
-            url = utils.generate_mapper_obis_url("", {"taxonid": taxonid})
-            await process.log(f"Sending a GET request to the Mapper OBIS occurrence API at {url}")
-
-            response = requests.get(url)
-            code = f"{response.status_code} {http.client.responses.get(response.status_code, '')}"
-
-            if response.ok:
-                await process.log(f"Response code: {code}")
-            else:
-                await process.log(f"Response code: {code} - something went wrong!")
-                return
-
-            response_json = response.json()
-
-            await process.log(
-                text=f"The API query using URL {url} "
-            )
-
-            await process.create_artifact(
-                mimetype="application/json",
-                description="OBIS data for the prompt: " + request,
-                uris=[url],
-                metadata={
-                    "data_source": "OBIS",
-                    "portal_url": "portal_url",
-                }
-            )
-
             await context.reply(f"I have successfully searched for occurrences and found {record_count} matching records. I've created an artifact with the results.")
 
         except InstructorRetryException as e:

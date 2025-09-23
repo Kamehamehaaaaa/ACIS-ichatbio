@@ -15,3 +15,7 @@ schema==0.7.7
 tenacity==9.1.2
 utils==1.0.2
 ichatbio-sdk==0.2.1
+geopy==2.4.1
+geohash==1.0
+pygeohash==1.2.0
+shapely==2.0.4
