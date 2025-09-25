@@ -1,0 +1,7 @@
+Explored LangChain and its alternatives like LlamaIndex and HayStack.
+
+LlamaIndex is sounds interesting too but LangChain is better suited for tool calling. LlamaIndex is best used for RAG and data connection to LLM models.
+
+Havent started coding a lot with LangChain as I wanted to explore different options available for tool calling.
+
+Anisa recommended a course on Pydantic framework on DeepLearningAI. Started on the course. Explored Tools Calling using pydantic model. 
