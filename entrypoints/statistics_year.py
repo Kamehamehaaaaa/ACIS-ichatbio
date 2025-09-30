@@ -49,7 +49,8 @@ async def run(request: str, context: ResponseContext):
         await process.log("Querying OBIS")
         try:
             
-            url = utils.generate_obis_extension_url("statistics", params, "years", True)
+            #url = utils.generate_obis_extension_url("statistics", params, "years", True)
+            url = utils.generate_obis_url("statistics/years", params)
             await process.log(f"Sending a GET request to the OBIS statistics API at {url}")
 
             response = requests.get(url)
@@ -67,17 +68,16 @@ async def run(request: str, context: ResponseContext):
                 text=f"The API query using URL {url} returned statistics for species from OBIS"
             )
 
-            record_count = response_json.get("records", 0)
+            #record_count = response_json.get("records", 0)
 
-            await process.log(response_json)
+            #await process.log(response_json)
 
             await process.create_artifact(
                 mimetype="application/json",
                 description="OBIS data for the prompt: " + request,
                 uris=[url],
                 metadata={
-                    "data_source": "OBIS",
-                    "retrieved_record_count": record_count
+                    "data_source": "OBIS"
                 }
             )
 

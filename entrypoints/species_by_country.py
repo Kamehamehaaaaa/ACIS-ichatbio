@@ -64,7 +64,8 @@ async def run(request: str, context: ResponseContext):
             await process.log("Error generating params.")
             return
 
-        del params["areaid"]
+        if "areaid" in params:
+            del params["areaid"]
 
         await process.log("Generated search parameters", data=params)
 

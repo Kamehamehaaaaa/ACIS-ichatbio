@@ -21,7 +21,7 @@ from utils import utils
 
 entrypoint= AgentEntrypoint(
     id="statistics",
-    description="Returns statistics of occurrence of species from OBIS",
+    description="Returns number of occurrence of species from OBIS",
     parameters=None
 )
 

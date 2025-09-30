@@ -31,6 +31,12 @@ async def run(request: str, context: ResponseContext):
     async with context.begin_process(summary="Searching Ocean Biodiversity Information System") as process:
         process: IChatBioAgentProcess
 
+        place_res = await search.get_place_from_request(request)
+        wkt = ""
+
+        if "place" in place_res:
+            wkt = await search.place_to_geohash_wkt(place_res["place"], 2)
+
         await process.log("Generating search parameters for species checklist")
         
         try:
@@ -39,7 +45,16 @@ async def run(request: str, context: ResponseContext):
             await process.log("Error generating params.")
 
             return
-        
+
+        await process.log("Initial params generated", data=params)
+
+        if "areaid" in params:
+            del params["areaid"]
+            await process.log(wkt)
+            wkt = str(wkt)
+            wkt_updated = wkt.replace("POLYGON ", "POLYGON")
+            params["geometry"] = wkt_updated
+
         await process.log("Generated search parameters", data=params)
 
         await process.log("Querying OBIS")

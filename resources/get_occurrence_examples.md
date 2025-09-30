@@ -82,7 +82,7 @@ rq: {
 "Request": "Find Egregia menziesii in the Pacific Ocean",
 "rq": {
     "scientificname": "Egregia menziesii",
-    "marine_region": "Pacific Ocean"
+    "areaid": "Pacific Ocean"
 }
 ```
 
